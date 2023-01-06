@@ -19,40 +19,39 @@ QUERY_COUNT = 10000
 # QUERY_COUNT = 10
 
 EXPERIMENTS = [
-  {
-    # Experiment Set q.1: Query unencrypted fields on unencrypted collection
-    "name" : "es1",
-    "coll" : "pbl",
-    "encryptedFieldCount" : 0,
-    "threadCounts" : [1,4,8,16],
-    #"contentionFactors" : [1,4,8,16],
-    "contentionFactors" : [1],
-    "queries" : [
-      {
-        "field" : "fixed_10",
-        "value" : "fixed_hf"
-      },
-      {
-        "field" : "fixed_10",
-        "value" : "uar"
-      },
-      {
-        "field" : "uar_[1,10]",
-        "value" : "uar"
-      },
-      {
-        "field" : "uar_[1,10]",
-        "value" : "uar_alllow"
-      },
-    ]
-  },
+  # {
+  #   # Experiment Set q.1: Query unencrypted fields on unencrypted collection
+  #   "name" : "es1",
+  #   "coll" : "pbl",
+  #   "encryptedFieldCount" : 0,
+  #   "threadCounts" : [1,4,8,16],
+  #   "contentionFactors" : [1],
+  #   "queries" : [
+  #     {
+  #       "field" : "fixed_10",
+  #       "value" : "fixed_hf"
+  #     },
+  #     {
+  #       "field" : "fixed_10",
+  #       "value" : "uar"
+  #     },
+  #     {
+  #       "field" : "uar_[1,10]",
+  #       "value" : "uar"
+  #     },
+  #     {
+  #       "field" : "uar_[1,10]",
+  #       "value" : "uar_alllow"
+  #     },
+  #   ]
+  # },
   {
     # Experiment Set q.2: Query unencrypted fields on partially encrypted collection
     "name" : "es2",
     "coll" : "pbl",
     "encryptedFieldCount" : 5,
     "threadCounts" : [1,4,8,16],
-    "contentionFactors" : [1,4,8,16],
+    "contentionFactors" : [1,4], #,8,16],
     "queries" : [
       {
         "field" : "fixed_10",
@@ -78,7 +77,7 @@ EXPERIMENTS = [
     "coll" : "pbl",
     "encryptedFieldCount" : 5,
     "threadCounts" : [1,4,8,16],
-    "contentionFactors" : [1,4,8,16],
+    "contentionFactors" : [1,4], #,8,16],
     "queries" : [
       {
         "field" : "fixed_1",
@@ -98,32 +97,32 @@ EXPERIMENTS = [
       },
     ]
   },
-  {
-    # Experiment Set q.4: Query encrypted fields on fully encrypted collection
-    "name" : "es4",
-    "coll" : "pbl",
-    "encryptedFieldCount" : 10,
-    "threadCounts" : [1,4,8,16],
-    "contentionFactors" : [1,4,8,16],
-    "queries" : [
-      {
-        "field" : "fixed_1",
-        "value" : "fixed_hf"
-      },
-      {
-        "field" : "fixed_1",
-        "value" : "uar"
-      },
-      {
-        "field" : "uar_[1,10]",
-        "value" : "uar"
-      },
-      {
-        "field" : "uar_[1,10]",
-        "value" : "uar_alllow"
-      },
-    ]
-  },
+  # {
+  #   # Experiment Set q.4: Query encrypted fields on fully encrypted collection
+  #   "name" : "es4",
+  #   "coll" : "pbl",
+  #   "encryptedFieldCount" : 10,
+  #   "threadCounts" : [1,4,8,16],
+  #   "contentionFactors" : [1,4,8,16],
+  #   "queries" : [
+  #     {
+  #       "field" : "fixed_1",
+  #       "value" : "fixed_hf"
+  #     },
+  #     {
+  #       "field" : "fixed_1",
+  #       "value" : "uar"
+  #     },
+  #     {
+  #       "field" : "uar_[1,10]",
+  #       "value" : "uar"
+  #     },
+  #     {
+  #       "field" : "uar_[1,10]",
+  #       "value" : "uar_alllow"
+  #     },
+  #   ]
+  # },
   # {
   #   # Experiment Set q.5: Check the impact of BSON limit on queries on both encrypted and unencrypted fields
   #   "name" : "es5",
