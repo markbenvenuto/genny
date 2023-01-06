@@ -81,7 +81,7 @@ Actors:
   Database: genny_qebench3
   ClientName: EncryptedPool
   Phases:
-  # - *load_phase
+  - *load_phase
   - Repeat: 2000.0
     Collection: *collection_param
     MetricsName: "q3"
