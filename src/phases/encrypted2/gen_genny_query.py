@@ -51,7 +51,7 @@ EXPERIMENTS = [
     "coll" : "pbl",
     "encryptedFieldCount" : 5,
     "threadCounts" : [1,4,8,16],
-    "contentionFactors" : [1,4], #,8,16],
+    "contentionFactors" : [1,4,8,16],
     "queries" : [
       {
         "field" : "fixed_10",
@@ -77,7 +77,7 @@ EXPERIMENTS = [
     "coll" : "pbl",
     "encryptedFieldCount" : 5,
     "threadCounts" : [1,4,8,16],
-    "contentionFactors" : [1,4], #,8,16],
+    "contentionFactors" : [1,4,8,16],
     "queries" : [
       {
         "field" : "fixed_1",
