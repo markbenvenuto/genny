@@ -54,7 +54,7 @@ Clients:
 
 
 LoadPhase: &load_phase
-  Repeat: 5000.0
+  Repeat: 1000.0
   Collection: &collection_param {^Parameter: {Name: "Collection", Default: "testcoll"}}
   MetricsName: "load"
   Operations:
@@ -77,12 +77,12 @@ Actors:
 
 - Name: InsertActor
   Type: CrudActor
-  Threads: 16
+  Threads: 8
   Database: genny_qebench3
   ClientName: EncryptedPool
   Phases:
   - *load_phase
-  - Repeat: 2000.0
+  - Repeat: 100.0
     Collection: *collection_param
     MetricsName: "q3"
     Operations:
