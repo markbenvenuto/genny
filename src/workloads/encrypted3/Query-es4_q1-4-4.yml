@@ -1,0 +1,109 @@
+SchemaVersion: 2018-07-01
+Owner: "@10gen/server-security"
+Description: |
+  Performs a series of insert operations, using the following properties:
+    - All documents have 11 fields, including 1 _id field, and 10 data fields.
+    - The first 10 data fields are encrypted.
+    - _id is always unique.
+    - Values in data fields fit a 'pbl_cf4_ef10' distribution. .
+    - The insertions are performed by 4 client threads.
+  This test is uniquely identified as 'Query-es4_q1-4-4'.
+
+Encryption:
+  UseCryptSharedLib: true
+  CryptSharedLibPath: /data/workdir/mongocrypt/lib/mongo_crypt_v1.so
+  EncryptedCollections:
+  - Database: genny_qebench2
+    Collection: pbl_cf4_ef10
+    EncryptionType: queryable
+        
+    QueryableEncryptedFields:
+      field0: &field_schema { type: "string", queries: [{queryType: "equality", contention: 4}] }
+      field1: *field_schema
+      field2: *field_schema
+      field3: *field_schema
+      field4: *field_schema
+      field5: *field_schema
+      field6: *field_schema
+      field7: *field_schema
+      field8: *field_schema
+      field9: *field_schema
+
+
+Clients:
+  EncryptedPool:
+    QueryOptions:
+      maxPoolSize: 400
+
+    EncryptionOptions:
+      KeyVaultDatabase: "keyvault"
+      KeyVaultCollection: "datakeys"
+      EncryptedCollections:
+      - genny_qebench2.pbl_cf4_ef10
+
+
+LoadPhase: &load_phase
+  Repeat: 25000
+  Collection: &collection_param {^Parameter: {Name: "Collection", Default: "pbl_cf4_ef10"}}
+  MetricsName: "load"
+  Operations:
+  - OperationName: insertOne
+    OperationMetricsName: inserts
+    OperationCommand:
+      Document:
+        LoadConfig:
+          Path: ../../phases/encrypted2/maps_pbl.yml
+          Key: document_insert_pbl
+          Parameters:
+            Database: ignored
+
+
+Actors:
+- Name: InsertActor
+  Type: CrudActor
+  Threads: 4
+  Database: genny_qebench2
+  ClientName: EncryptedPool
+  Phases:
+  - *load_phase
+  
+  - Repeat: 2500.0
+    Collection: *collection_param
+    MetricsName: "q1"
+    Operations:
+      
+      -
+        OperationName: findOne
+        OperationMetricsName: reads
+        OperationCommand:
+          Filter:
+            field1 : v4
+
+
+- Name: LoggingActor0
+  Type: LoggingActor
+  Threads: 1
+  Phases:
+  
+  - LogEvery: 5 minutes
+    Blocking: None
+    
+  - LogEvery: 5 minutes
+    Blocking: None
+    
+
+AutoRun:
+- When:
+    mongodb_setup:
+      $eq:
+      - single-replica-fle
+    branch_name:
+      $neq:
+      - v4.0
+      - v4.2
+      - v4.4
+      - v5.0
+      - v6.0
+      - v6.1
+      - v6.2
+

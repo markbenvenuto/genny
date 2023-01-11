@@ -97,9 +97,35 @@ EXPERIMENTS = [
   #     },
   #   ]
   # },
-  {
+  # {
+  #   # Experiment Set q.4: Query encrypted fields on fully encrypted collection
+  #   "name" : "es4",
+  #   "coll" : "pbl",
+  #   "encryptedFieldCount" : 10,
+  #   "threadCounts" : [4], #[1,4,8,16],
+  #   "contentionFactors" : [1,4], #[1,4,8,16],
+  #   "queries" : [
+  #     {
+  #       "field" : "fixed_1",
+  #       "value" : "fixed_hf"
+  #     },
+  #     # {
+  #     #   "field" : "fixed_1",
+  #     #   "value" : "uar"
+  #     # },
+  #     # {
+  #     #   "field" : "uar_[1,10]",
+  #     #   "value" : "uar"
+  #     # },
+  #     {
+  #       "field" : "uar_[1,10]",
+  #       "value" : "uar_alllow"
+  #     },
+  #   ]
+  # },
+    {
     # Experiment Set q.4: Query encrypted fields on fully encrypted collection
-    "name" : "es4",
+    "name" : "es4_q1",
     "coll" : "pbl",
     "encryptedFieldCount" : 10,
     "threadCounts" : [4], #[1,4,8,16],
@@ -109,14 +135,16 @@ EXPERIMENTS = [
         "field" : "fixed_1",
         "value" : "fixed_hf"
       },
-      {
-        "field" : "fixed_1",
-        "value" : "uar"
-      },
-      {
-        "field" : "uar_[1,10]",
-        "value" : "uar"
-      },
+    ]
+  },
+    {
+    # Experiment Set q.4: Query encrypted fields on fully encrypted collection
+    "name" : "es4_q4",
+    "coll" : "pbl",
+    "encryptedFieldCount" : 10,
+    "threadCounts" : [4], #[1,4,8,16],
+    "contentionFactors" : [1,4], #[1,4,8,16],
+    "queries" : [
       {
         "field" : "uar_[1,10]",
         "value" : "uar_alllow"
