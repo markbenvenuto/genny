@@ -26,14 +26,13 @@ def main():
 
     # Generate maps
     for typeDS in ls:
-        with open(f"maps_{typeDS}.yml", "w") as fh:
+        with open(f"src/phases/encrypted2/maps_{typeDS}.yml", "w") as fh:
             print("Generating: %s" % (typeDS))
 
             fh.write("""SchemaVersion: 2018-07-01
 Owner: "@10gen/server-security"
 Description: |
-    Mimics a YCSB workload, with queryable encryption enabled. Performs queries on an encrypted
-    field, instead of _id, during the read/update phase.\n\n""")
+    MAPS.\n\n""")
 
             fh.write("##############################\n")
 
@@ -49,9 +48,12 @@ Description: |
             # NOTE: comment sanityCheckData if datagen is taking too long
             # sanityCheckData(ds)
 
-            for k in ds.fieldDescDict.keys():
+            k = list(ds.fieldDescDict.keys())[0]
+
+            for k2 in ds.fieldDescDict.keys():
+
                 vf = ds.fieldDescDict[k].valFreqsDict
-                path = "map_%s_%s" % (typeDS, k)
+                path = "map_%s_%s" % (typeDS, k2)
 
                 fh.write("%s: &%s\n" % (path, path))
                 fh.write("    id: %s\n" % (path))

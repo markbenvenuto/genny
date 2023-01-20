@@ -11,41 +11,41 @@ import frequency_map
 #######################################################
 # GLOBAL CONSTANTS
 #
-DOCUMENT_COUNT = 100000
-QUERY_COUNT = 10000
+# DOCUMENT_COUNT = 100000
+# QUERY_COUNT = 10000
 
 # Test Values
-# DOCUMENT_COUNT = 100
-# QUERY_COUNT = 10
+DOCUMENT_COUNT = 100
+QUERY_COUNT = 10
 
 EXPERIMENTS = [
-  {
-    # Experiment Set q.1: Query unencrypted fields on unencrypted collection
-    "name" : "es1",
-    "coll" : "pbl",
-    "encryptedFieldCount" : 0,
-    "threadCounts" : [1,4,8,16],
-    #"contentionFactors" : [1,4,8,16],
-    "contentionFactors" : [1],
-    "queries" : [
-      {
-        "field" : "fixed_10",
-        "value" : "fixed_hf"
-      },
-      {
-        "field" : "fixed_10",
-        "value" : "uar"
-      },
-      {
-        "field" : "uar_[1,10]",
-        "value" : "uar"
-      },
-      {
-        "field" : "uar_[1,10]",
-        "value" : "uar_alllow"
-      },
-    ]
-  },
+  # {
+  #   # Experiment Set q.1: Query unencrypted fields on unencrypted collection
+  #   "name" : "es1",
+  #   "coll" : "pbl",
+  #   "encryptedFieldCount" : 0,
+  #   "threadCounts" : [1,4,8,16],
+  #   #"contentionFactors" : [1,4,8,16],
+  #   "contentionFactors" : [1],
+  #   "queries" : [
+  #     {
+  #       "field" : "fixed_10",
+  #       "value" : "fixed_hf"
+  #     },
+  #     {
+  #       "field" : "fixed_10",
+  #       "value" : "uar"
+  #     },
+  #     {
+  #       "field" : "uar_[1,10]",
+  #       "value" : "uar"
+  #     },
+  #     {
+  #       "field" : "uar_[1,10]",
+  #       "value" : "uar_alllow"
+  #     },
+  #   ]
+  # },
   {
     # Experiment Set q.2: Query unencrypted fields on partially encrypted collection
     "name" : "es2",
@@ -98,32 +98,32 @@ EXPERIMENTS = [
       },
     ]
   },
-  {
-    # Experiment Set q.4: Query encrypted fields on fully encrypted collection
-    "name" : "es4",
-    "coll" : "pbl",
-    "encryptedFieldCount" : 10,
-    "threadCounts" : [1,4,8,16],
-    "contentionFactors" : [1,4,8,16],
-    "queries" : [
-      {
-        "field" : "fixed_1",
-        "value" : "fixed_hf"
-      },
-      {
-        "field" : "fixed_1",
-        "value" : "uar"
-      },
-      {
-        "field" : "uar_[1,10]",
-        "value" : "uar"
-      },
-      {
-        "field" : "uar_[1,10]",
-        "value" : "uar_alllow"
-      },
-    ]
-  },
+  # {
+  #   # Experiment Set q.4: Query encrypted fields on fully encrypted collection
+  #   "name" : "es4",
+  #   "coll" : "pbl",
+  #   "encryptedFieldCount" : 10,
+  #   "threadCounts" : [1,4,8,16],
+  #   "contentionFactors" : [1,4,8,16],
+  #   "queries" : [
+  #     {
+  #       "field" : "fixed_1",
+  #       "value" : "fixed_hf"
+  #     },
+  #     {
+  #       "field" : "fixed_1",
+  #       "value" : "uar"
+  #     },
+  #     {
+  #       "field" : "uar_[1,10]",
+  #       "value" : "uar"
+  #     },
+  #     {
+  #       "field" : "uar_[1,10]",
+  #       "value" : "uar_alllow"
+  #     },
+  #   ]
+  # },
   # {
   #   # Experiment Set q.5: Check the impact of BSON limit on queries on both encrypted and unencrypted fields
   #   "name" : "es5",
@@ -294,7 +294,7 @@ class WorkloadWriter:
   def generate_logging_phases(self):
     phases = ""
 
-    count = 0
+    count = 1
     if self.do_query:
       count += len(self.queries)
 
@@ -309,6 +309,22 @@ class WorkloadWriter:
 
     return phases
 
+  def generate_nop_phases(self):
+    phases = ""
+
+    count = -1
+    if self.do_query:
+      count += len(self.queries)
+
+    if self.do_load:
+      count += 1
+
+    for _ in range(count):
+      phases += """
+  - *Nop
+    """
+
+    return phases
 
   def serialize(self):
 
@@ -338,6 +354,7 @@ class WorkloadWriter:
 
     query_phases = self.generate_query_phases()
     logging_phases = self.generate_logging_phases()
+    nop_phases = self.generate_nop_phases()
 
     str_buf = io.StringIO("")
 
@@ -376,6 +393,21 @@ LoadPhase: &load_phase
           Parameters:
             Database: ignored
 
+CreateUnencryptedIndexes: &create_index_phase
+
+  Repeat: 1
+  Database: genny_qebench2
+  Collection: {self.collectionName}
+  Operations:
+  - OperationMetricsName: CreateUnencryptedIndexes
+    OperationName: RunCommand
+    OperationCommand:
+      createIndexes: {self.collectionName}
+      indexes:
+      - key:
+          field10: 1
+        name: field10Index
+
 
 Actors:
 - Name: InsertActor
@@ -385,8 +417,18 @@ Actors:
   ClientName: EncryptedPool
   Phases:
   {load_phase}
+  - &Nop {{Nop: true}}
   {query_phases}
 
+- Name: IndexSetup
+  Type: RunCommand
+  Threads: {self.threadCount}
+  Database: genny_qebench2
+  ClientName: EncryptedPool
+  Phases:
+  - *Nop
+  - *create_index_phase
+  {nop_phases}
 
 - Name: LoggingActor0
   Type: LoggingActor
