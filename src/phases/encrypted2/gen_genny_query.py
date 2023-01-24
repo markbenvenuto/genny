@@ -11,12 +11,12 @@ import frequency_map
 #######################################################
 # GLOBAL CONSTANTS
 #
-# DOCUMENT_COUNT = 100000
-# QUERY_COUNT = 10000
+DOCUMENT_COUNT = 100000
+QUERY_COUNT = 10000
 
 # Test Values
-DOCUMENT_COUNT = 100
-QUERY_COUNT = 10
+#DOCUMENT_COUNT = 100
+#QUERY_COUNT = 10
 
 EXPERIMENTS = [
   # {
