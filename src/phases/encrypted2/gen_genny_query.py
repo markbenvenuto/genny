@@ -15,18 +15,44 @@ DOCUMENT_COUNT = 100000
 QUERY_COUNT = 10000
 
 # Test Values
-#DOCUMENT_COUNT = 100
-#QUERY_COUNT = 10
+# DOCUMENT_COUNT = 100
+# QUERY_COUNT = 10
 
 EXPERIMENTS = [
+  {
+    # Experiment Set q.1: Query unencrypted fields on unencrypted collection
+    "name" : "es1",
+    "coll" : "pbl",
+    "encryptedFieldCount" : 0,
+    "threadCounts" : [1,4,8,16],
+    #"contentionFactors" : [1,4,8,16],
+    "contentionFactors" : [1],
+    "queries" : [
+      {
+        "field" : "fixed_10",
+        "value" : "fixed_hf"
+      },
+      {
+        "field" : "fixed_10",
+        "value" : "uar"
+      },
+      {
+        "field" : "uar_[1,10]",
+        "value" : "uar"
+      },
+      {
+        "field" : "uar_[1,10]",
+        "value" : "uar_alllow"
+      },
+    ]
+  },
   # {
-  #   # Experiment Set q.1: Query unencrypted fields on unencrypted collection
-  #   "name" : "es1",
+  #   # Experiment Set q.2: Query unencrypted fields on partially encrypted collection
+  #   "name" : "es2",
   #   "coll" : "pbl",
-  #   "encryptedFieldCount" : 0,
+  #   "encryptedFieldCount" : 5,
   #   "threadCounts" : [1,4,8,16],
-  #   #"contentionFactors" : [1,4,8,16],
-  #   "contentionFactors" : [1],
+  #   "contentionFactors" : [1,4,8,16],
   #   "queries" : [
   #     {
   #       "field" : "fixed_10",
@@ -37,67 +63,41 @@ EXPERIMENTS = [
   #       "value" : "uar"
   #     },
   #     {
-  #       "field" : "uar_[1,10]",
+  #       "field" : "uar_[6,10]",
   #       "value" : "uar"
   #     },
   #     {
-  #       "field" : "uar_[1,10]",
+  #       "field" : "uar_[6,10]",
   #       "value" : "uar_alllow"
   #     },
   #   ]
   # },
-  {
-    # Experiment Set q.2: Query unencrypted fields on partially encrypted collection
-    "name" : "es2",
-    "coll" : "pbl",
-    "encryptedFieldCount" : 5,
-    "threadCounts" : [1,4,8,16],
-    "contentionFactors" : [1,4,8,16],
-    "queries" : [
-      {
-        "field" : "fixed_10",
-        "value" : "fixed_hf"
-      },
-      {
-        "field" : "fixed_10",
-        "value" : "uar"
-      },
-      {
-        "field" : "uar_[6,10]",
-        "value" : "uar"
-      },
-      {
-        "field" : "uar_[6,10]",
-        "value" : "uar_alllow"
-      },
-    ]
-  },
-  {
-    # Experiment Set q.3: Query encrypted fields on partially encrypted collection
-    "name" : "es3",
-    "coll" : "pbl",
-    "encryptedFieldCount" : 5,
-    "threadCounts" : [1,4,8,16],
-    "contentionFactors" : [1,4,8,16],
-    "queries" : [
-      {
-        "field" : "fixed_1",
-        "value" : "fixed_hf"
-      },
-      {
-        "field" : "fixed_1",
-        "value" : "uar"
-      },
-      {
-        "field" : "uar_[1,5]",
-        "value" : "uar"
-      },
-      {
-        "field" : "uar_[1,5]",
-        "value" : "uar_alllow"
-      },
-    ]
-  },
+  # {
+  #   # Experiment Set q.3: Query encrypted fields on partially encrypted collection
+  #   "name" : "es3",
+  #   "coll" : "pbl",
+  #   "encryptedFieldCount" : 5,
+  #   "threadCounts" : [1,4,8,16],
+  #   "contentionFactors" : [1,4,8,16],
+  #   "queries" : [
+  #     {
+  #       "field" : "fixed_1",
+  #       "value" : "fixed_hf"
+  #     },
+  #     {
+  #       "field" : "fixed_1",
+  #       "value" : "uar"
+  #     },
+  #     {
+  #       "field" : "uar_[1,5]",
+  #       "value" : "uar"
+  #     },
+  #     {
+  #       "field" : "uar_[1,5]",
+  #       "value" : "uar_alllow"
+  #     },
+  #   ]
+  # },
   # {
   #   # Experiment Set q.4: Query encrypted fields on fully encrypted collection
   #   "name" : "es4",
@@ -383,15 +383,28 @@ LoadPhase: &load_phase
   Collection: &collection_param {{^Parameter: {{Name: "Collection", Default: "{self.collectionName}"}}}}
   MetricsName: "load"
   Operations:
-  - OperationName: insertOne
-    OperationMetricsName: inserts
+  - OperationName: withTransaction
     OperationCommand:
-      Document:
-        LoadConfig:
-          Path: ../../phases/encrypted2/maps_{self.map_name}.yml
-          Key: {self.documentKey}
-          Parameters:
-            Database: ignored
+      Options:
+        WriteConcern:
+          Level: majority
+          Journal: true
+        ReadConcern:
+          Level: snapshot
+        ReadPreference:
+          ReadMode: primaryPreferred
+          MaxStaleness: 1000 seconds
+      OperationsInTransaction:
+      - OperationName: insertOne
+        OperationMetricsName: inserts
+        OperationCommand:
+          OnSession: true
+          Document:
+            LoadConfig:
+              Path: ../../phases/encrypted2/maps_{self.map_name}.yml
+              Key: {self.documentKey}
+              Parameters:
+                Database: ignored
 
 CreateUnencryptedIndexes: &create_index_phase
 
