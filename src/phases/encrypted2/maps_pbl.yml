@@ -2477,4 +2477,5 @@ document_insert_pbl:
     field8:  {^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f8 }
     field9:  {^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f9 }
     field10:  {^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f10 }
+    intField: {^Inc: {start: 0, step: 1, multiplier: 25}}
 
