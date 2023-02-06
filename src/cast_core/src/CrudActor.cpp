@@ -1030,6 +1030,7 @@ struct WithTransactionOperation : public BaseOperation {
                 op->run(*session);
             }
         });
+        // TODO - remove this lamda
         this->doBlock(_operation, [&](metrics::OperationContext& ctx) {
             session.with_transaction(run_txn_ops, _options);
             return std::nullopt;

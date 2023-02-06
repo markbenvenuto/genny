@@ -11,12 +11,12 @@ import frequency_map
 #######################################################
 # GLOBAL CONSTANTS
 #
-DOCUMENT_COUNT = 100000
-QUERY_COUNT = 10000
+# DOCUMENT_COUNT = 100000
+# QUERY_COUNT = 10000
 
 # Test Values
-# DOCUMENT_COUNT = 100
-# QUERY_COUNT = 10
+DOCUMENT_COUNT = 100
+QUERY_COUNT = 10
 
 EXPERIMENTS = [
   # {
@@ -271,7 +271,7 @@ class WorkloadWriter:
   def generate_query_phase(self, name, query_selector):
     (count, operation_block) = self.generate_query_operations(query_selector)
 
-    repeat_count = QUERY_COUNT / count / self.threadCount
+    repeat_count = math.ceil(QUERY_COUNT / count / self.threadCount)
 
     return f"""
   - Repeat: {repeat_count}
@@ -2675,34 +2675,22 @@ LoadPhase: &load_phase
   Collection: &collection_param {{^Parameter: {{Name: "Collection", Default: "{self.collectionName}"}}}}
   MetricsName: "load"
   Operations:
-  - OperationName: withTransaction
+  - OperationName: insertOne
+    OperationMetricsName: inserts
     OperationCommand:
-      Options:
-        WriteConcern:
-          Level: majority
-          Journal: true
-        ReadConcern:
-          Level: snapshot
-        ReadPreference:
-          ReadMode: primaryPreferred
-          MaxStaleness: 1000 seconds
-      OperationsInTransaction:
-      - OperationName: insertOne
-        OperationMetricsName: inserts
-        OperationCommand:
-          OnSession: true
-          Document:
-            field1:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f1 }}
-            field2:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f2 }}
-            field3:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f3 }}
-            field4:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f4 }}
-            field5:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f5 }}
-            field6:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f6 }}
-            field7:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f7 }}
-            field8:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f8 }}
-            field9:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f9 }}
-            field10:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f10 }}
-            intField: {{^Inc: {{start: 0, step: 1, multiplier: {self.iterationsPerThread} }} }}
+      OnSession: true
+      Document:
+        field1:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f1 }}
+        field2:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f2 }}
+        field3:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f3 }}
+        field4:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f4 }}
+        field5:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f5 }}
+        field6:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f6 }}
+        field7:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f7 }}
+        field8:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f8 }}
+        field9:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f9 }}
+        field10:  {{^TakeRandomStringFromFrequencyMapSingleton: *map_pbl_f10 }}
+        intField: {{^Inc: {{start: 0, step: 1, multiplier: {self.iterationsPerThread} }} }}
 
 CreateUnencryptedIndexes: &create_index_phase
 
