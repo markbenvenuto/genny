@@ -1,0 +1,161 @@
+{
+    "typeDS": "vhf",
+    "rangeDesc": {
+        "vlf": [
+            1,
+            10
+        ],
+        "mlf": [
+            11,
+            100
+        ],
+        "lf": [
+            101,
+            1000
+        ],
+        "hf": [
+            1001,
+            10000
+        ],
+        "mhf": [
+            10001,
+            50000
+        ],
+        "vhf": [
+            50001,
+            9223372036854775807
+        ]
+    },
+    "fieldsDesc": {
+        "f1": {
+            "valFreqs": {
+                "v1": 100000
+            },
+            "vlfValList": [],
+            "mlfValList": [],
+            "lfValList": [],
+            "hfValList": [],
+            "mhfValList": [],
+            "vhfValList": [
+                "v1"
+            ]
+        },
+        "f2": {
+            "valFreqs": {
+                "v1": 100000
+            },
+            "vlfValList": [],
+            "mlfValList": [],
+            "lfValList": [],
+            "hfValList": [],
+            "mhfValList": [],
+            "vhfValList": [
+                "v1"
+            ]
+        },
+        "f3": {
+            "valFreqs": {
+                "v1": 100000
+            },
+            "vlfValList": [],
+            "mlfValList": [],
+            "lfValList": [],
+            "hfValList": [],
+            "mhfValList": [],
+            "vhfValList": [
+                "v1"
+            ]
+        },
+        "f4": {
+            "valFreqs": {
+                "v1": 100000
+            },
+            "vlfValList": [],
+            "mlfValList": [],
+            "lfValList": [],
+            "hfValList": [],
+            "mhfValList": [],
+            "vhfValList": [
+                "v1"
+            ]
+        },
+        "f5": {
+            "valFreqs": {
+                "v1": 100000
+            },
+            "vlfValList": [],
+            "mlfValList": [],
+            "lfValList": [],
+            "hfValList": [],
+            "mhfValList": [],
+            "vhfValList": [
+                "v1"
+            ]
+        },
+        "f6": {
+            "valFreqs": {
+                "v1": 100000
+            },
+            "vlfValList": [],
+            "mlfValList": [],
+            "lfValList": [],
+            "hfValList": [],
+            "mhfValList": [],
+            "vhfValList": [
+                "v1"
+            ]
+        },
+        "f7": {
+            "valFreqs": {
+                "v1": 100000
+            },
+            "vlfValList": [],
+            "mlfValList": [],
+            "lfValList": [],
+            "hfValList": [],
+            "mhfValList": [],
+            "vhfValList": [
+                "v1"
+            ]
+        },
+        "f8": {
+            "valFreqs": {
+                "v1": 100000
+            },
+            "vlfValList": [],
+            "mlfValList": [],
+            "lfValList": [],
+            "hfValList": [],
+            "mhfValList": [],
+            "vhfValList": [
+                "v1"
+            ]
+        },
+        "f9": {
+            "valFreqs": {
+                "v1": 100000
+            },
+            "vlfValList": [],
+            "mlfValList": [],
+            "lfValList": [],
+            "hfValList": [],
+            "mhfValList": [],
+            "vhfValList": [
+                "v1"
+            ]
+        },
+        "f10": {
+            "valFreqs": {
+                "v1": 100000
+            },
+            "vlfValList": [],
+            "mlfValList": [],
+            "lfValList": [],
+            "hfValList": [],
+            "mhfValList": [],
+            "vhfValList": [
+                "v1"
+            ]
+        }
+    }
+}

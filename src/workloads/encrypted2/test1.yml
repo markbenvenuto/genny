@@ -1,0 +1,89 @@
+SchemaVersion: 2018-07-01
+Owner: "@10gen/server-security"
+Description: |
+  Performs a series of insert operations, using the following properties:
+    - All documents have 11 fields, including 1 _id field, and 10 data fields.
+    - The first 0 data fields are encrypted.
+    - _id is always unique.
+    - Values in data fields fit a 'vlf' distribution. All field/value pairs have very low frequency.
+    - The insertions are performed by 4 client threads.
+  This test is uniquely identified as 'InsOnly-vlf-0-1-4'.
+
+Encryption:
+  UseCryptSharedLib: true
+  # CryptSharedLibPath: /data/workdir/mongocrypt/lib/mongo_crypt_v1.so
+  CryptSharedLibPath: /data/mci/mongo_crypt_v1.so
+  EncryptedCollections:
+  - Database: genny_qebench
+    Collection: testcoll
+    EncryptionType: queryable
+    QueryableEncryptedFields:
+      field0: { type: "string", queries: [{queryType: "equality", contention: 1}] }
+
+
+Clients:
+  EncryptedPool:
+    QueryOptions:
+      maxPoolSize: 400
+    EncryptionOptions:
+      KeyVaultDatabase: "keyvault"
+      KeyVaultCollection: "datakeys"
+      EncryptedCollections:
+      - genny_qebench.testcoll
+
+# LoadConfig:
+#     Path: /home/mark/src/genny/maps2.yml
+#     Key: map_hf_f1
+#     Parameters:
+#       Database: genny_qebench
+# map_hf_f1: &map_hf_f1
+#     id: map_hf_f1
+#     from:
+#         v1: 100
+#         v2: 100
+#         v3: 100
+
+
+# map_hf_f2: &map_hf_f2
+#     id: map_hf_f2
+#     from:
+#         v1: 100
+
+
+LoadPhase: &load_phase
+  Repeat: 10.0
+  Collection: &collection_param {^Parameter: {Name: "Collection", Default: "testcoll"}}
+  MetricsName: "load"
+  Operations:
+  - OperationName: insertOne
+    OperationMetricsName: inserts
+    OperationCommand:
+      Document:
+        LoadConfig:
+          # Path: /home/mark/src/genny/maps2.yml
+          Path: /home/mark/src/genny/maps.yml
+          Key: document_insert_hf
+          Parameters:
+            Database: ignored
+
+Actors:
+# - LoadConfig:
+#     Path: maps.yml
+#     Key: YCSBLikeActor
+#     Parameters:
+
+- Name: InsertActor
+  Type: CrudActor
+  Threads: 4
+  Database: genny_qebench
+  ClientName: EncryptedPool
+  Phases:
+  - *load_phase
+# - Name: LoggingActor0
+#   Type: LoggingActor
+#   Threads: 1
+#   Phases:
+#   - LogEvery: 5 minutes
+#     Blocking: None
+
+

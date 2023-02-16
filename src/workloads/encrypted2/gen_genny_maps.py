@@ -24,16 +24,17 @@ def main():
 
     # ls  = ["hf"]
 
-    with open("maps.yml", "w") as fh:
+    # Generate maps
+    for typeDS in ls:
+        with open(f"maps_{typeDS}.yml", "w") as fh:
+            print("Generating: %s" % (typeDS))
 
-        fh.write("""SchemaVersion: 2018-07-01
+            fh.write("""SchemaVersion: 2018-07-01
 Owner: "@10gen/server-security"
 Description: |
     Mimics a YCSB workload, with queryable encryption enabled. Performs queries on an encrypted
     field, instead of _id, during the read/update phase.\n\n""")
 
-        # Generate maps
-        for typeDS in ls:
             fh.write("##############################\n")
 
             fh.write("########## %s\n" % (typeDS))
