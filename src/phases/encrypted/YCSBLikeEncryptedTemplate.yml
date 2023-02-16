@@ -103,36 +103,36 @@ Actors:
         - {field9: {^FormatString: {"format": "%0100d", "withArgs": [*rand_secondary_key]}}}
       UpdateDocument: *update_doc
 
-- Name: IndexSecondaryKey
-  Type: RunCommand
-  Threads: 1
-  Phases:
-  - Repeat: 1
-    Database: *encrypted_db
-    MetricsName: "indexSecondary"
-    Operations:
-    - OperationName: RunCommand
-      OperationCommand:
-        createIndexes: *encrypted_coll
-        indexes:
-        - key:
-            field9: 1
-          name: field9
-  - &Nop {Nop: true}
-  - *Nop
-  - *Nop
-  - *Nop
-  - *Nop
-  - *Nop
+# - Name: IndexSecondaryKey
+#   Type: RunCommand
+#   Threads: 1
+#   Phases:
+#   - Repeat: 1
+#     Database: *encrypted_db
+#     MetricsName: "indexSecondary"
+#     Operations:
+#     - OperationName: RunCommand
+#       OperationCommand:
+#         createIndexes: *encrypted_coll
+#         indexes:
+#         - key:
+#             field9: 1
+#           name: field9
+#   - &Nop {Nop: true}
+#   - *Nop
+#   - *Nop
+#   - *Nop
+#   - *Nop
+#   - *Nop
 
-- Name: ShardCollection
-  Type: AdminCommand
-  Threads: 1
-  Phases:
-  - *Nop
-  - *shard_or_nop
-  - *Nop
-  - *Nop
-  - *Nop
-  - *Nop
-  - *Nop
+# - Name: ShardCollection
+#   Type: AdminCommand
+#   Threads: 1
+#   Phases:
+#   - *Nop
+#   - *shard_or_nop
+#   - *Nop
+#   - *Nop
+#   - *Nop
+#   - *Nop
+#   - *Nop

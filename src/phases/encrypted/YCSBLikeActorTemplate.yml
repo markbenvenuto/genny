@@ -110,10 +110,10 @@ YCSBLikeActor:
   Database: {^Parameter: {Name: "Database", Default: ""}}
   ClientName: {^Parameter: {Name: "ClientName", Default: "Default"}}
   Phases:
-  - {Nop: true}
-  - {Nop: true}
+  # - {Nop: true}
+  # - {Nop: true}
   - *load_phase
-  - *100read_phase
-  - *95read5update_phase
-  - *100update_phase
-  - *50read50update_phase
+  # - *100read_phase
+  # - *95read5update_phase
+  # - *100update_phase
+  # - *50read50update_phase
