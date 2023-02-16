@@ -221,26 +221,26 @@ class WorkloadWriter:
     return fieldDescription
 
   def _generateAutoRun(self):
-      return ""
+      # return ""
 
-#       # Tweak this bit to change tasks Genny will run in Evergreen
-#       if ex["coll"] == "blimit" and enc == 5 and cf == 4 and tc == 4:
-#         return """AutoRun:
-# - When:
-#     mongodb_setup:
-#       $eq:
-#       - single-replica-fle
-#     branch_name:
-#       $neq:
-#       - v4.0
-#       - v4.2
-#       - v4.4
-#       - v5.0
-#       - v6.0
-#       - v6.1
-#       - v6.2"""
-#             else:
-#               return ""
+      # # Tweak this bit to change tasks Genny will run in Evergreen
+      # if ex["coll"] == "blimit" and enc == 5 and cf == 4 and tc == 4:
+        return """AutoRun:
+- When:
+    mongodb_setup:
+      $eq:
+      - single-replica-fle
+    branch_name:
+      $neq:
+      - v4.0
+      - v4.2
+      - v4.4
+      - v5.0
+      - v6.0
+      - v6.1
+      - v6.2"""
+            # else:
+            #   return ""
 
   def generate_query_operation(self, field, value):
     return f"""
