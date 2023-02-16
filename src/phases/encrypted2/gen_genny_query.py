@@ -271,7 +271,7 @@ class WorkloadWriter:
   def generate_query_phase(self, name, query_selector):
     (count, operation_block) = self.generate_query_operations(query_selector)
 
-    repeat_count = QUERY_COUNT /count
+    repeat_count = QUERY_COUNT / count / self.threadCount
 
     return f"""
   - Repeat: {repeat_count}

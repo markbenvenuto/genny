@@ -10,6 +10,36 @@ can we reuse a db?, ask erwin
 
 create clustered collections instead of regular for state collections
 
+
+Flamegraph
+-----------
+
+On CPU flamegraph
+----------------
+AS Root:
+
+perf record -F 99 -p `pgrep -x mongod` -g sleep 60
+
+IMPORTANT - MUST run perf script as ROOT!!!!! otherwise you will get unknown kernel symbols
+perf script > out.perf
+
+AS normal user (can be root)
+~/repo/FlameGraph/stackcollapse-perf.pl out.perf > out.folded
+
+cat out.folded | sd "FLECrud-\d+" "FLECrud"  | ~/repo/FlameGraph/flamegraph.pl --width=3000 > flame3.svg
+cat find.folded | sd "conn\d+" "conn"| sd "FLECrud-\d+" "FLECrud" | ~/repo/FlameGraph/flamegraph.pl --width=3000 > flame5.svg
+
+Off Cpu flamegraph
+---------
+./offcputime.py -f --stack-storage-size=10000 -p `pgrep -x mongod` 30 > out3.offcpu
+
+ rg mongo out.offcpu | /home/mark/repo/FlameGraph/flamegraph.pl  --color=io --countname=us --width=3000     --title="Off-CPU Time Flame Graph: idle system" > offcpu.svg
+
+ cat out3.offcpu | sd "conn\d+" "conn"| sd "FLECrud-\d+" "FLECrud" | /home/mark/repo/FlameGraph/flamegraph.pl  --color=io --countname=us --width=3000     --title="Off-CPU Time Flame Graph: idle system" > ~/mongo/offcpu3.svg
+
+
+
+
 ===================
 Experiment Set q.1: Query unencrypted fields on unencrypted collection
 coll = pbl
