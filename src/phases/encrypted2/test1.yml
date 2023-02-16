@@ -77,7 +77,7 @@ Actors:
 
 - Name: InsertActor
   Type: CrudActor
-  Threads: 4
+  Threads: 16
   Database: genny_qebench3
   ClientName: EncryptedPool
   Phases:
