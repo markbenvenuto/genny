@@ -1,3 +1,16 @@
+TODO
+----
+
+python script to run workloads
+save dbs
+save cedar results
+save ftdc metrics?
+
+can we reuse a db?, ask erwin
+
+create clustered collections instead of regular for state collections
+
+===================
 Experiment Set q.1: Query unencrypted fields on unencrypted collection
 coll = pbl
 enc = 0
@@ -67,3 +80,56 @@ uar: the value is selected uniformly at random from Domain(f)
 uar_<b>: the value is selected uniformly at random from the bucket b.
 uar_alllow: the value is selected uniformly at random from buckets {vlf, mlf, lf}
 uar_allhigh: the value is selected uniformly at random from buckets {hf, mhf, hf}
+
+
+
+
+
+
+
+
+=============================
+
+
+(genny_venv) ➜  genny git:(frequency_map) ✗ ./run-genny workload src/workloads/encrypted3/Query-es2-1-8.yml
+Note: NumExpr detected 16 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+[info ] [genny.curator       ] Moved existing metrics (presumably from a prior run). cwd=/home/mark/src/genny existing=build/WorkloadOutput/CedarMetrics moved_to=build/WorkloadOutput/CedarMetrics-2022-12-15T002201Z-3bb7bcc9 timestamp=2022-12-15T00:22:01Z
+[info ] [genny.curator       ] Starting poplar grpc in the background. command=['/home/mark/src/genny/build/curator/curator', 'poplar', 'grpc'] cwd=/home/mark/src/genny timestamp=2022-12-15T00:22:01Z
+[curator] 2022/12/14 19:22:01 [p=info]: starting poplar gRPC service at 'localhost:2288'
+{"t":{"$date":"2022-12-15T00:22:03.287Z"},"s":"I",  "c":"NETWORK",  "id":4648601, "ctx":"thread1","msg":"Implicit TCP FastOpen unavailable. If TCP FastOpen is required, set tcpFastOpenServer, tcpFastOpenClient, and tcpFastOpenQueueSize."}
+{"t":{"$date":"2022-12-15T00:22:03.371Z"},"s":"I",  "c":"ASIO",     "id":6529201, "ctx":"thread1","msg":"Network interface redundant shutdown","attr":{"state":"Stopped"}}
+{"t":{"$date":"2022-12-15T00:22:03.372Z"},"s":"I",  "c":"ASIO",     "id":22582,   "ctx":"thread1","msg":"Killing all outstanding egress activity."}
+[2022-12-14 19:22:03.373786] [0x00007fa0febff6c0] [info]    Constructing pool with MongoURI 'mongodb://localhost:27017/?appName=Genny&maxPoolSize=400'
+[2022-12-14 19:22:04.379149] [0x00007f9f315d06c0] [info]    Beginning phase 0
+[2022-12-14 19:27:03.132642] [0x00007f9f35dd96c0] [info]    Phase still progressing (300s)
+[2022-12-14 19:32:03.132823] [0x00007f9f35dd96c0] [info]    Phase still progressing (600s)
+[2022-12-14 19:37:03.132985] [0x00007f9f35dd96c0] [info]    Phase still progressing (900s)
+[2022-12-14 19:42:03.133499] [0x00007f9f35dd96c0] [info]    Phase still progressing (1200s)
+[2022-12-14 19:47:03.133714] [0x00007f9f35dd96c0] [info]    Phase still progressing (1500s)
+[2022-12-14 19:52:03.134161] [0x00007f9f35dd96c0] [info]    Phase still progressing (1800s)
+[2022-12-14 19:57:03.134760] [0x00007f9f35dd96c0] [info]    Phase still progressing (2100s)
+[2022-12-14 20:02:03.135184] [0x00007f9f35dd96c0] [info]    Phase still progressing (2400s)
+[2022-12-14 20:07:03.135379] [0x00007f9f35dd96c0] [info]    Phase still progressing (2700s)
+[2022-12-14 20:12:03.135534] [0x00007f9f35dd96c0] [info]    Phase still progressing (3000s)
+[2022-12-14 20:17:03.135798] [0x00007f9f35dd96c0] [info]    Phase still progressing (3300s)
+[2022-12-14 20:22:03.135860] [0x00007f9f35dd96c0] [info]    Phase still progressing (3600s)
+[2022-12-14 20:25:14.666080] [0x00007f9f33dd56c0] [info]    Ended phase 0
+[2022-12-14 20:25:14.666483] [0x00007f9f355d86c0] [info]    Beginning phase 1
+[2022-12-14 20:25:14.667752] [0x00007f9f35dd96c0] [info]    Phase still progressing (3791s)
+[2022-12-14 20:25:26.295895] [0x00007f9f31dd16c0] [info]    Ended phase 1
+[2022-12-14 20:25:26.296116] [0x00007f9f335d46c0] [info]    Beginning phase 2
+[2022-12-14 20:25:26.296899] [0x00007f9f35dd96c0] [info]    Phase still progressing (3803s)
+[2022-12-14 20:25:39.688442] [0x00007f9f315d06c0] [info]    Ended phase 2
+[2022-12-14 20:25:39.688771] [0x00007f9f35dd96c0] [info]    Beginning phase 3
+[2022-12-14 20:25:39.689600] [0x00007f9f35dd96c0] [info]    Phase still progressing (3816s)
+[2022-12-14 20:30:39.689883] [0x00007f9f35dd96c0] [info]    Phase still progressing (4116s)
+[2022-12-14 20:35:39.690392] [0x00007f9f35dd96c0] [info]    Phase still progressing (4416s)
+[2022-12-14 20:38:39.665505] [0x00007f9f34dd76c0] [info]    Ended phase 3
+[2022-12-14 20:38:39.666052] [0x00007f9f32dd36c0] [info]    Beginning phase 4
+[2022-12-14 20:38:39.666877] [0x00007f9f35dd96c0] [info]    Phase still progressing (4596s)
+[2022-12-14 20:38:52.656427] [0x00007f9f32dd36c0] [info]    Ended phase 4
+{"t":{"$date":"2022-12-15T01:38:52.664Z"},"s":"I",  "c":"ASIO",     "id":6529201, "ctx":"shutdown","msg":"Network interface redundant shutdown","attr":{"state":"Stopped"}}
+{"t":{"$date":"2022-12-15T01:38:52.665Z"},"s":"I",  "c":"ASIO",     "id":22582,   "ctx":"shutdown","msg":"Killing all outstanding egress activity."}
+[curator] 2022/12/14 20:39:01 [p=info]: poplar rpc service terminated
+(genny_venv) ➜  genny git:(frequency_map) ✗

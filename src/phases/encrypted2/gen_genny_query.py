@@ -11,18 +11,46 @@ import frequency_map
 #######################################################
 # GLOBAL CONSTANTS
 #
-# DOCUMENT_COUNT = 100,000
-# QUERY_COUNT = 10,000
+DOCUMENT_COUNT = 100000
+QUERY_COUNT = 10000
 
 # Test Values
-DOCUMENT_COUNT = 100
-QUERY_COUNT = 10
+# DOCUMENT_COUNT = 100
+# QUERY_COUNT = 10
 
 EXPERIMENTS = [
   {
+    # Experiment Set q.1: Query unencrypted fields on unencrypted collection
     "name" : "es1",
     "coll" : "pbl",
     "encryptedFieldCount" : 0,
+    "threadCounts" : [1,4,8,16],
+    #"contentionFactors" : [1,4,8,16],
+    "contentionFactors" : [1],
+    "queries" : [
+      {
+        "field" : "fixed_10",
+        "value" : "fixed_hf"
+      },
+      {
+        "field" : "fixed_10",
+        "value" : "uar"
+      },
+      {
+        "field" : "uar_[1,10]",
+        "value" : "uar"
+      },
+      {
+        "field" : "uar_[1,10]",
+        "value" : "uar_alllow"
+      },
+    ]
+  },
+  {
+    # Experiment Set q.2: Query unencrypted fields on partially encrypted collection
+    "name" : "es2",
+    "coll" : "pbl",
+    "encryptedFieldCount" : 5,
     "threadCounts" : [1,4,8,16],
     "contentionFactors" : [1,4,8,16],
     "queries" : [
@@ -35,15 +63,85 @@ EXPERIMENTS = [
         "value" : "uar"
       },
       {
-        "field" : "uar_[1,10]",
+        "field" : "uar_[6,10]",
+        "value" : "uar"
+      },
+      {
+        "field" : "uar_[6,10]",
         "value" : "uar_alllow"
+      },
+    ]
+  },
+  {
+    # Experiment Set q.3: Query encrypted fields on partially encrypted collection
+    "name" : "es3",
+    "coll" : "pbl",
+    "encryptedFieldCount" : 5,
+    "threadCounts" : [1,4,8,16],
+    "contentionFactors" : [1,4,8,16],
+    "queries" : [
+      {
+        "field" : "fixed_1",
+        "value" : "fixed_hf"
+      },
+      {
+        "field" : "fixed_1",
+        "value" : "uar"
+      },
+      {
+        "field" : "uar_[1,5]",
+        "value" : "uar"
+      },
+      {
+        "field" : "uar_[1,5]",
+        "value" : "uar_alllow"
+      },
+    ]
+  },
+  {
+    # Experiment Set q.4: Query encrypted fields on fully encrypted collection
+    "name" : "es4",
+    "coll" : "pbl",
+    "encryptedFieldCount" : 10,
+    "threadCounts" : [1,4,8,16],
+    "contentionFactors" : [1,4,8,16],
+    "queries" : [
+      {
+        "field" : "fixed_1",
+        "value" : "fixed_hf"
+      },
+      {
+        "field" : "fixed_1",
+        "value" : "uar"
       },
       {
         "field" : "uar_[1,10]",
         "value" : "uar"
-      }
+      },
+      {
+        "field" : "uar_[1,10]",
+        "value" : "uar_alllow"
+      },
     ]
-  }
+  },
+  # {
+  #   # Experiment Set q.5: Check the impact of BSON limit on queries on both encrypted and unencrypted fields
+  #   "name" : "es5",
+  #   "coll" : "blimit",
+  #   "encryptedFieldCount" : 5,
+  #   "threadCounts" : [1,4,8,16],
+  #   "contentionFactors" : [1,4,8,16],
+  #   "queries" : [
+  #     {
+  #       "field" : "fixed_1",
+  #       "value" : "fixed_hf"
+  #     },
+  #     {
+  #       "field" : "fixed_10",
+  #       "value" : "fixed_hf"
+  #     },
+  #   ]
+  # },
 ]
 
 
@@ -88,7 +186,7 @@ class WorkloadWriter:
 
   def __init__(self, testName, collectionName, queries, encryptedFields, contentionFactor, threadCount, do_load, do_query):
     self.testName = testName
-    self.collectionName = f"{collectionName}_cf{contentionFactor}"
+    self.collectionName = f"{collectionName}_cf{contentionFactor}_ef{encryptedFields}"
     self.map_name = collectionName
     self.queries = queries
     self.encryptedFields = encryptedFields
@@ -102,7 +200,7 @@ class WorkloadWriter:
     self.isEncrypted = encryptedFields > 0
 
     # TODO - stop hard coding this
-    self.freq_map = frequency_map.load_map("src/workloads/encrypted2/maps_pbl.yml")
+    self.freq_map = frequency_map.load_map("src/phases/encrypted2/maps_pbl.yml")
 
     self.freq_buckets = {}
     for f in self.freq_map.keys():
@@ -115,7 +213,7 @@ class WorkloadWriter:
     for num in range(0, self.encryptedFields):
         if num == 0:
           fieldDescription += "    QueryableEncryptedFields:\n"
-          fieldDescription += f'      field{num}: &field_schema {{ type: "long", queries: [{{queryType: "equality", contention: {self.contentionFactor}}}] }}\n'
+          fieldDescription += f'      field{num}: &field_schema {{ type: "string", queries: [{{queryType: "equality", contention: {self.contentionFactor}}}] }}\n'
           continue
         else:
           fieldDescription += f'      field{num}: *field_schema\n'
@@ -216,10 +314,9 @@ class WorkloadWriter:
 
     encryption_setup_block = f"""Encryption:
   UseCryptSharedLib: true
-  # CryptSharedLibPath: /data/workdir/mongocrypt/lib/mongo_crypt_v1.so
-  CryptSharedLibPath: /data/mci/mongo_crypt_v1.so
+  CryptSharedLibPath: /data/workdir/mongocrypt/lib/mongo_crypt_v1.so
   EncryptedCollections:
-  - Database: genny_qebench
+  - Database: genny_qebench2
     Collection: {self.collectionName}
     EncryptionType: queryable
         """
@@ -229,7 +326,7 @@ class WorkloadWriter:
       KeyVaultDatabase: "keyvault"
       KeyVaultCollection: "datakeys"
       EncryptedCollections:
-      - genny_qebench.{self.collectionName}
+      - genny_qebench2.{self.collectionName}
 """
     if self.isEncrypted == False:
         encryption_setup_block = "\n"
@@ -274,7 +371,7 @@ LoadPhase: &load_phase
     OperationCommand:
       Document:
         LoadConfig:
-          Path: ../encrypted2/maps_{self.map_name}.yml
+          Path: ../../phases/encrypted2/maps_{self.map_name}.yml
           Key: {self.documentKey}
           Parameters:
             Database: ignored
@@ -284,7 +381,7 @@ Actors:
 - Name: InsertActor
   Type: CrudActor
   Threads: {self.threadCount}
-  Database: genny_qebench
+  Database: genny_qebench2
   ClientName: EncryptedPool
   Phases:
   {load_phase}
@@ -338,7 +435,7 @@ def main():
           with open(f"src/workloads/encrypted3/{testName}.yml", 'w+') as testFile:
             testFile.write(buf)
 
-          sys.exit(1)
+          # sys.exit(1)
 
 if __name__== "__main__":
     main()

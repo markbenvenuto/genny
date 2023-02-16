@@ -2,7 +2,7 @@
 
 # run_workloads.sh
 
-WORKLOADS=$(ls -1 data/*.yml)
+WORKLOADS=$(ls -1 src/workloads/encrypted3/*.yml)
 
 echo $WORKLOADS
 

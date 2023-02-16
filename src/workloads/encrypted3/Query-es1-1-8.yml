@@ -6,8 +6,8 @@ Description: |
     - The first 0 data fields are encrypted.
     - _id is always unique.
     - Values in data fields fit a 'pbl_cf1_ef0' distribution. .
-    - The insertions are performed by 1 client threads.
-  This test is uniquely identified as 'Query-es1-1-1'.
+    - The insertions are performed by 8 client threads.
+  This test is uniquely identified as 'Query-es1-1-8'.
 
 
 
@@ -21,7 +21,7 @@ Clients:
 
 
 LoadPhase: &load_phase
-  Repeat: 100000
+  Repeat: 12500
   Collection: &collection_param {^Parameter: {Name: "Collection", Default: "pbl_cf1_ef0"}}
   MetricsName: "load"
   Operations:
@@ -39,7 +39,7 @@ LoadPhase: &load_phase
 Actors:
 - Name: InsertActor
   Type: CrudActor
-  Threads: 1
+  Threads: 8
   Database: genny_qebench2
   ClientName: EncryptedPool
   Phases:

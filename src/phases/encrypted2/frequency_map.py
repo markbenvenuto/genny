@@ -71,7 +71,7 @@ class FrequencyBuckets:
         return list(self.full_map.keys())
 
     def uar_bucket(self, bucket):
-        return [x[1] for x in self.buckets[bucket]]
+        return [x[0] for x in self.buckets[bucket]]
 
     def uar_all_low(self):
         return self.uar_bucket("vlf") + self.uar_bucket("mlf") + self.uar_bucket("lf")
