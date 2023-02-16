@@ -126,12 +126,12 @@ void reportUnused(const NodeSource& nodeSource, const bool dryrun) {
     auto action = dryrun ? "constructing" : "running";
     std::stringstream message;
     message << std::endl << "<BETA FEATURE> - YAML Usage Check" << std::endl;
-    
+
     if (!unused.empty()) {
         message << "There " << verb << " " << many << " YAML structure" << plural
                             << " unused when " << action << " the workload." << std::endl;
         message << "\n\t" << boost::algorithm::join(unused, "\n\t") << std::endl;
-        
+
     } else {
         message << "All YAML structures appear to have been used when " << action
                 << " this workload." << std::endl;
@@ -267,7 +267,7 @@ DefaultDriver::OutcomeCode doRunLogic(const DefaultDriver::ProgramOptions& optio
     // names for timing files.
     reportMetrics(metrics, "WorkloadTimingRecorder", "Workload", true, startTime);
 
-    reportUnused(nodeSource, false);
+    // reportUnused(nodeSource, false);
     return outcomeCode;
 }
 
