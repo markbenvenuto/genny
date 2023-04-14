@@ -5,7 +5,7 @@ Description: |
 
 Encryption:
   UseCryptSharedLib: true
-  CryptSharedLibPath: /data/workdir/mongocrypt/lib/mongo_crypt_v1.so
+  CryptSharedLibPath: /media/ebs/workdir/mongocrypt/lib/mongo_crypt_v1.so
   EncryptedCollections:
   - Database: genny_qebench2
     Collection: medical
@@ -81,7 +81,7 @@ Actors:
                 Filter: {states: {^ChooseFromDataset: {"path": "./src/genny/src/workloads/contrib/qe_test_gen/states.txt"}}}
                 Update: {$set: {states: {^ChooseFromDataset: {"path": "./src/genny/src/workloads/contrib/qe_test_gen/states.txt"}}}}
           Transitions: *transitions
-  
+
   - Name: LoggingActor0
     Type: LoggingActor
     Threads: 1

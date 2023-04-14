@@ -5,7 +5,7 @@ Description: |
 
 Encryption:
   UseCryptSharedLib: true
-  CryptSharedLibPath: /data/workdir/mongocrypt/lib/mongo_crypt_v1.so
+  CryptSharedLibPath: /media/ebs/workdir/mongocrypt/lib/mongo_crypt_v1.so
   EncryptedCollections:
   - Database: genny_qebench2
     Collection: medical
@@ -50,7 +50,7 @@ Actors:
               Parameters:
                 Database: ignored
                 multiplier: 62500
-  
+
   - Name: LoggingActor0
     Type: LoggingActor
     Threads: 1

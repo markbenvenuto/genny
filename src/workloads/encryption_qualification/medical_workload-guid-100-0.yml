@@ -5,7 +5,7 @@ Description: |
 
 Encryption:
   UseCryptSharedLib: true
-  CryptSharedLibPath: /data/workdir/mongocrypt/lib/mongo_crypt_v1.so
+  CryptSharedLibPath: /media/ebs/workdir/mongocrypt/lib/mongo_crypt_v1.so
   EncryptedCollections:
   - Database: genny_qebench2
     Collection: medical
@@ -81,7 +81,7 @@ Actors:
                 Filter: {guid: {^Join: {array: [ "99999999-9999-9999-99999", {^FormatString: {"format": "%|07d|", "withArgs": [{^RandomInt: {min: 0, max: 1000000}}]}}]}}}
                 Update: {$set: {guid: {^Join: {array: [ "99999999-9999-9999-99999", {^FormatString: {"format": "%|07d|", "withArgs": [{^RandomInt: {min: 0, max: 1000000}}]}}]}}}}
           Transitions: *transitions
-  
+
   - Name: LoggingActor0
     Type: LoggingActor
     Threads: 1

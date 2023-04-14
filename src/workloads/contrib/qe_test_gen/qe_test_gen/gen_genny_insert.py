@@ -71,7 +71,7 @@ for name, coll in collections.items():
 
                 encryption_setup_block = """Encryption:
   UseCryptSharedLib: true
-  # CryptSharedLibPath: /data/workdir/mongocrypt/lib/mongo_crypt_v1.so
+  # CryptSharedLibPath: /media/ebs/workdir/mongocrypt/lib/mongo_crypt_v1.so
   CryptSharedLibPath: /data/mci/mongo_crypt_v1.so
   EncryptedCollections:
   - Database: genny_qebench

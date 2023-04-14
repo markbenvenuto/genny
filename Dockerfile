@@ -34,8 +34,8 @@ COPY --link ./.git/ ./.git
 RUN ./run-genny install -d amazon2
 
 FROM base
-RUN mkdir -p /data/workdir/mongocrypt/
-RUN curl https://mciuploads.s3.amazonaws.com/mongodb-mongo-master/mongo_crypt/linux-x86-dynamic-compile-required/b206e0264580e726f2ba4063a435ded5de28d9a2/mongo_crypt_shared_v1-6.3.0-alpha-492-gb206e02.tgz | tar -xvzf - -C /data/workdir/mongocrypt
+RUN mkdir -p /media/ebs/workdir/mongocrypt/
+RUN curl https://mciuploads.s3.amazonaws.com/mongodb-mongo-master/mongo_crypt/linux-x86-dynamic-compile-required/b206e0264580e726f2ba4063a435ded5de28d9a2/mongo_crypt_shared_v1-6.3.0-alpha-492-gb206e02.tgz | tar -xvzf - -C /media/ebs/workdir/mongocrypt
 
 COPY --from=build /genny /genny
 COPY --from=build /data/mci/gennytoolchain/installed/x64-linux-dynamic/lib/ /data/mci/gennytoolchain/installed/x64-linux-dynamic/lib/

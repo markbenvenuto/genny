@@ -267,7 +267,7 @@ class WorkloadWriter:
     def serialize(self):
         encryption_setup_block = f"""Encryption:
   UseCryptSharedLib: true
-  CryptSharedLibPath: /data/workdir/mongocrypt/lib/mongo_crypt_v1.so
+  CryptSharedLibPath: /media/ebs/workdir/mongocrypt/lib/mongo_crypt_v1.so
   EncryptedCollections:
   - Database: genny_qebench2
     Collection: {self.collectionName}

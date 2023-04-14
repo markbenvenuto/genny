@@ -72,7 +72,7 @@ GlobalDefaults:
 Encryption:
   # The following options control whether to use mongocryptd or mongo_crypt_v1.so
   # UseCryptSharedLib: true
-  # CryptSharedLibPath: /data/workdir/mongocrypt/lib/mongo_crypt_v1.so
+  # CryptSharedLibPath: /media/ebs/workdir/mongocrypt/lib/mongo_crypt_v1.so
   EncryptedCollections:
   - Database: *encrypted_db
     Collection: "accounts"
