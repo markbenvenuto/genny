@@ -71,7 +71,7 @@ Actors:
   ClientName: EncryptedPool
   Phases:
   - *load_phase
-  - Repeat: 1250.0
+  - Repeat: 12500.0
     Collection: *collection_param
     MetricsName: "q1"
     Operations:
